@@ -8,28 +8,21 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.Test;
+import pages.BasePage;
+import pages.LoginPage;
 import pages.NewAccountPage;
 
 import java.util.concurrent.TimeUnit;
 
-public class AccountTest {
+public class AccountTest extends BaseTest {
 
     @Test
     public void createAccountTest() {
         User user = new User("https://tms-ba.my.salesforce.com/","ryhordubrovin-vfqa@force.com","TMSAQA20onl");
         Account account = new Account("AccountAQA","www.google.com","Apparel");
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--disable-popup-blocking");
-        WebDriver driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
         driver.get(user.getUrl());
-
-        // переписать
-        driver.findElement(By.xpath("//input[@id='username']")).sendKeys(user.getLogin());
-        driver.findElement(By.xpath("//input[@id='password']")).sendKeys(user.getPassword());
-        driver.findElement(By.xpath("//input[@id='Login']")).click();
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.loginUser(user);
 
         NewAccountPage newAccountPage = new NewAccountPage(driver);
         newAccountPage.openPage()
